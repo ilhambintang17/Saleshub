@@ -31,9 +31,9 @@ Below is the high-level architecture of how the application components interact 
 
 ```mermaid
 graph TD
-    Client[("💻 Client Browser\n(Admin/User)")] -->|HTTP Requests / AJAX| UI["🖥️ Frontend (Vanilla JS + TailwindCSS)"]
-    UI -->|RESTful API Calls (JSON)| API["⚙️ Backend API (Node.js + Express)"]
-    API -->|MySQL2 Pool Queries| DB[("🗄️ MySQL Database\n(sales_db)")]
+    Client[Client Browser] -->|HTTP Requests| UI[Frontend SPA]
+    UI -->|REST API Calls| API[Node.js Backend]
+    API -->|SQL Queries| DB[(MySQL Database)]
     DB -->|Result Sets| API
     API -->|JSON Responses| UI
     UI -->|DOM Updates| Client
