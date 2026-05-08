@@ -10,7 +10,17 @@
 
 ## 📸 Preview
 
+**Dashboard Overview**
 ![SalesHub Dashboard Preview](./preview.png)
+
+**Outlets Management**
+![Outlets Management](./preview-outlets.png)
+
+**Products & Inventory**
+![Products Management](./preview-products.png)
+
+**Payments Configuration**
+![Payments Configuration](./preview-payments.png)
 
 ---
 

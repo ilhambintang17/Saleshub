@@ -164,9 +164,12 @@ function openProductModal(data = null) {
       <div class="form-group"><label>Brand</label><select id="field_brand_id"><option value="">-- None --</option>${b.map(x => `<option value="${x.id_brand}" ${data?.brand_id===x.id_brand?'selected':''}>${x.name}</option>`).join('')}</select></div>
     </div>
     <div class="form-group"><label>Categories</label>
-      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px">${c.map(x => {
+      <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-top: 12px;">${c.map(x => {
         const checked = data?.category_ids?.includes(x.id_category) || (data?.category_names||'').includes(x.name);
-        return `<label style="display:flex;align-items:center;gap:4px;font-size:13px;cursor:pointer"><input type="checkbox" class="cat-check" value="${x.id_category}" ${checked?'checked':''}/> ${x.name}</label>`;
+        return `<label style="display:flex;align-items:center;gap:10px;font-size:14px;cursor:pointer;padding:10px 14px;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc;transition:all 0.2s ease;box-shadow:0 1px 2px rgba(0,0,0,0.02);" onmouseover="this.style.borderColor='#4f46e5';this.style.background='#f1f5f9';" onmouseout="this.style.borderColor='#e2e8f0';this.style.background='#f8fafc';">
+          <input type="checkbox" class="cat-check" style="width:18px;height:18px;cursor:pointer;margin:0;accent-color:#4f46e5;" value="${x.id_category}" ${checked?'checked':''}/> 
+          <span style="font-weight:500;color:#334155;line-height:1.2;">${x.name}</span>
+        </label>`;
       }).join('')}</div>
     </div>`;
   openModal(isEdit ? 'Edit Product' : 'Add Product', html,

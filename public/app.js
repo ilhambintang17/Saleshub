@@ -82,6 +82,37 @@ function formatDate(d) {
 }
 function shortId(id) { return id ? id.substring(0, 8).toUpperCase() : '-'; }
 
+async function generateReport() {
+  toast('Generating report...', 'success');
+  try {
+    const data = await api('/api/orders');
+    if (!data || data.length === 0) return toast('No data to report', 'warning');
+    
+    let csv = 'Order ID,Date,Outlet,Total,Payment,Status\n';
+    data.forEach(o => {
+      const date = o.date ? new Date(o.date).toISOString().split('T')[0] : '';
+      const outlet = (o.name_outlet || '').replace(/"/g, '""');
+      const payment = (o.payment_name || '').replace(/"/g, '""');
+      const status = (o.status_name || '').replace(/"/g, '""');
+      csv += `"${o.id_order}","${date}","${outlet}",${o.total},"${payment}","${status}"\n`;
+    });
+    
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    a.download = `saleshub_report_${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+    toast('Report downloaded!', 'success');
+  } catch (err) {
+    toast('Failed to generate report: ' + err.message, 'error');
+  }
+}
+
 // ==================== NAVIGATION ====================
 const NAV_ITEMS = [
   { id: 'dashboard', icon: 'dashboard', label: 'Dashboard' },
