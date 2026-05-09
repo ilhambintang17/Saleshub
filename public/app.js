@@ -82,6 +82,26 @@ function formatDate(d) {
 }
 function shortId(id) { return id ? id.substring(0, 8).toUpperCase() : '-'; }
 
+function toggleCat(catId) {
+  const span = document.getElementById('cat_' + catId);
+  const icon = document.getElementById('cat_icon_' + catId);
+  const cb = span ? span.querySelector('.cat-check') : null;
+  if (!cb) return;
+  cb.checked = !cb.checked;
+  if (cb.checked) {
+    span.style.background = '#4f46e5';
+    span.style.color = '#fff';
+    span.style.borderColor = '#4f46e5';
+    icon.textContent = '✓';
+  } else {
+    span.style.background = '#f8fafc';
+    span.style.color = '#475569';
+    span.style.borderColor = '#e2e8f0';
+    icon.textContent = '';
+  }
+}
+
+
 async function generateReport() {
   toast('Generating report...', 'success');
   try {
@@ -638,10 +658,12 @@ function openProductModal(data = null) {
       <div class="form-group"><label>Variant</label><select id="field_variant_id"><option value="">-- None --</option>${v.map(x => `<option value="${x.id_variant}" ${data?.variant_id===x.id_variant?'selected':''}>${x.name}</option>`).join('')}</select></div>
       <div class="form-group"><label>Brand</label><select id="field_brand_id"><option value="">-- None --</option>${b.map(x => `<option value="${x.id_brand}" ${data?.brand_id===x.id_brand?'selected':''}>${x.name}</option>`).join('')}</select></div>
     </div>
-    <div class="form-group"><label>Categories</label>
-      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px">${c.map(x => {
+    <div class="form-group">
+      <label style="display:block;font-size:13px;font-weight:600;color:#475569;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.05em">Categories</label>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">${c.map(x => {
         const checked = data?.category_ids?.includes(x.id_category) || (data?.category_names||'').includes(x.name);
-        return `<label style="display:flex;align-items:center;gap:4px;font-size:13px;cursor:pointer"><input type="checkbox" class="cat-check" value="${x.id_category}" ${checked?'checked':''}/> ${x.name}</label>`;
+        const color = checked ? 'background:#4f46e5;color:#fff;border-color:#4f46e5;' : 'background:#f8fafc;color:#475569;border-color:#e2e8f0;';
+        return `<span id="cat_${x.id_category}" onclick="toggleCat('${x.id_category}')" style="${color}display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;border:1.5px solid;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.15s;user-select:none;"><span id="cat_icon_${x.id_category}" style="font-size:14px;">${checked?'✓':''}</span>${x.name}<input type="checkbox" class="cat-check" value="${x.id_category}" ${checked?'checked':''} style="display:none;"/></span>`;
       }).join('')}</div>
     </div>`;
   openModal(isEdit ? 'Edit Product' : 'Add Product', html,
